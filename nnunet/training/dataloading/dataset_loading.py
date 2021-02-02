@@ -485,7 +485,14 @@ class DataLoader2D(SlimDataLoaderBase):
 
                 foreground_classes = np.array(
                     [i for i in properties['class_locations'].keys() if len(properties['class_locations'][i]) != 0])
+                print(foreground_classes)
                 foreground_classes = foreground_classes[foreground_classes > 0]
+                print(foreground_classes)
+                print(" properties['class_locations'].keys()")
+                print(properties['class_locations'].keys())
+                print("i")
+                print(i)
+                
                 if len(foreground_classes) == 0:
                     selected_class = None
                     random_slice = np.random.choice(case_all_data.shape[1])
