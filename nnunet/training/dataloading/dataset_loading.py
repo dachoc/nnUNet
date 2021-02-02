@@ -447,32 +447,47 @@ class DataLoader2D(SlimDataLoaderBase):
 
     def generate_train_batch(self):
         selected_keys = np.random.choice(self.list_of_keys, self.batch_size, True, None)
+        print("selected_keys_"+selected_keys)
 
         data = np.zeros(self.data_shape, dtype=np.float32)
         seg = np.zeros(self.seg_shape, dtype=np.float32)
 
         case_properties = []
         for j, i in enumerate(selected_keys):
+            print("j_"+j)
+            print("i_"+i)
             if 'properties' in self._data[i].keys():
                 properties = self._data[i]['properties']
+                print("in self.data[i].keys()")
+                print("self._data[i]_"+self._data[i])
+                print("self._data[i]['properties']_"+self._data[i]['properties'])
             else:
                 properties = load_pickle(self._data[i]['properties_file'])
-            case_properties.append(properties)
+                print("NOT in self.data[i].keys()")
+                print("self._data[i]_"+self._data[i])
+                print("self._data[i]['properties_file']_"+self._data[i]['properties_file'])
 
+            case_properties.append()
             if self.get_do_oversample(j):
                 force_fg = True
             else:
                 force_fg = False
 
+            print("force_fg_"+force_fg)
+
             if not isfile(self._data[i]['data_file'][:-4] + ".npy"):
                 # lets hope you know what you're doing
                 case_all_data = np.load(self._data[i]['data_file'][:-4] + ".npz")['data']
+                print("in IF NOT isfile")
+                print("case_all_data"+case_all_data)
             else:
                 case_all_data = np.load(self._data[i]['data_file'][:-4] + ".npy", self.memmap_mode)
+                print("case_all_data" + case_all_data)
 
             # this is for when there is just a 2d slice in case_all_data (2d support)
             if len(case_all_data.shape) == 3:
                 case_all_data = case_all_data[:, None]
+                print("in 2D slice")
 
             # first select a slice. This can be either random (no force fg) or guaranteed to contain some class
             if not force_fg:
@@ -488,11 +503,13 @@ class DataLoader2D(SlimDataLoaderBase):
                 print(foreground_classes)
                 foreground_classes = foreground_classes[foreground_classes > 0]
                 print(foreground_classes)
+                print("properties['class_locations'][i]")
+                print(properties['class_locations'][i])
                 print(" properties['class_locations'].keys()")
                 print(properties['class_locations'].keys())
                 print("i")
                 print(i)
-                
+
                 if len(foreground_classes) == 0:
                     selected_class = None
                     random_slice = np.random.choice(case_all_data.shape[1])
