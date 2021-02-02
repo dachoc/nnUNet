@@ -303,7 +303,10 @@ class DataLoader3D(SlimDataLoaderBase):
                 # this saves us a np.unique. Preprocessing already did that for all cases. Neat.
                 foreground_classes = np.array(
                     [i for i in properties['class_locations'].keys() if len(properties['class_locations'][i]) != 0])
+                print(foreground_classes)
                 foreground_classes = foreground_classes[foreground_classes > 0]
+                print(foreground_classes)
+
 
                 if len(foreground_classes) == 0:
                     # this only happens if some image does not contain foreground voxels at all
